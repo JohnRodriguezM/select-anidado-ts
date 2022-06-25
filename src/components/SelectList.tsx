@@ -6,7 +6,7 @@ let help = helpHttp();
 
 interface PropsList {
   url?: string;
-  handleChange: any;
+  handleChange?: any;
   title: string;
   //states
   comunidad?: string | Array<any> | any;
@@ -21,16 +21,14 @@ interface PropsList {
   setPoblacion?: any;
 }
 
-const fetcher = async (path: any, adicional = "") => {
-  let response = await fetch(
-    `https://apiv1.geoapi.es/${path}?${adicional}&type=JSON&key=f7d7761c4f2816d1f57170d58eb2e2b63ebb09a56f9dfde588c1570a3d70c4e2`
-  );
-  return await response.json();
-};
+
+
+
+
+
 
 const SelectList: FC<PropsList> = ({
   url,
-  handleChange,
   title,
   setComunidad,
   comunidad,
@@ -38,6 +36,35 @@ const SelectList: FC<PropsList> = ({
   setProvincia,
   ...props
 }) => {
+
+  const [manejo, setManejo] = useState(false)
+  const [manejoCC, setManejoCC] = useState(null)
+
+
+  const fetcher = async (path: any, adicional = "") => {
+    let response = await fetch(
+      `https://apiv1.geoapi.es/${path}?${adicional || `CCOM=${manejoCC}`}&type=JSON&key=f7d7761c4f2816d1f57170d58eb2e2b63ebb09a56f9dfde588c1570a3d70c4e2`
+    );
+    console.log(response)
+    console.log(adicional)
+    return await response.json();
+  };
+
+  const handleChange = (e:any) => {
+    let busqueda = e.target.options[e.target.selectedIndex].value
+
+    let busqueda2 = e.target.options[e.target.selectedIndex].title
+    if(busqueda){
+      setManejo(true)
+      setManejoCC(busqueda2)
+    }
+    console.log(busqueda)
+    console.log(busqueda2)
+  }
+
+
+
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -54,7 +81,7 @@ const SelectList: FC<PropsList> = ({
       }
     };
     getData();
-  }, []);
+  },[]);
 
   return (
     <div>
@@ -72,10 +99,10 @@ const SelectList: FC<PropsList> = ({
       </select>
       <br />
       <select name="" id="" onChange = {handleChange}>
-        {comunidad ? provincia.map((el: any) => {
+        {manejo ? provincia.map((el: any) => {
           return(
-            <option value={el.PRO} key={el.PRO}>
-              {el.COM}
+            <option title = {el.CCOM} value={el.PRO} key={el.PRO}>
+              {el.PRO}
             </option>
           )
         }) : ''}
