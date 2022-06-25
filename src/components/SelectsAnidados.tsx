@@ -1,26 +1,29 @@
 import React,{FC,useState,useEffect} from 'react'
-import SelectList from './SelectList'
+import {SelectList} from './SelectList'
 
 export const SelectsAnidados = (props:any) => {
   const [comunidad, setComunidad] = useState([])
   const [provincia, setProvincia] = useState([])
-  const [municipio, setMunicipio] = useState("")
-  const [poblacion, setPoblacion] = useState("")
-
-
+  const [municipio, setMunicipio] = useState([])
+  const [poblacion, setPoblacion] = useState([])
 
 
   return (
-    <div>
+    <section>
       <h2>selects anidados</h2>
       <SelectList
+
       title = "Comunidad"
-      setComunidad = {setComunidad}
       comunidad = {comunidad}
+      setComunidad = {setComunidad}
+
       provincia = {provincia}
       setProvincia = {setProvincia}
+
+      municipio = {municipio}
+      setMunicipio = {setMunicipio}
       />
-    </div>
+    </section>
   )
 }
 
