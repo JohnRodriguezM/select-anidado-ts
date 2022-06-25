@@ -7,8 +7,9 @@ import { PropsList } from "../types/type";
 import { helpHttp } from "../helpers/helpHttps";
 
 let help = helpHttp();
-const BASE_URL = 'https://apiv1.geoapi.es/'
-const API_KEY = 'f7d7761c4f2816d1f57170d58eb2e2b63ebb09a56f9dfde588c1570a3d70c4e2'
+const BASE_URL = "https://apiv1.geoapi.es/";
+const API_KEY =
+  "f7d7761c4f2816d1f57170d58eb2e2b63ebb09a56f9dfde588c1570a3d70c4e2";
 
 export const SelectList: FC<PropsList> = ({
   url,
@@ -19,6 +20,8 @@ export const SelectList: FC<PropsList> = ({
   setProvincia,
   municipio,
   setMunicipio,
+  poblacion,
+  setPoblacion,
   ...props
 }) => {
   const [manejoProvincia, setManejoProvincia] = useState(null);
@@ -26,39 +29,41 @@ export const SelectList: FC<PropsList> = ({
   const [manejoPoblacion, setmanejoPoblacion] = useState(null);
 
   const handleChange = async (e: any) => {
-    let base = e.target.options[e.target.selectedIndex]
+    let base = e.target.options[e.target.selectedIndex];
     let busquedaProvincia = base.dataset.provincia;
     let busquedaMunicipio = base.dataset.municipio;
     let busquedaPoblacion = base.dataset.poblacion;
 
-    if(!busquedaProvincia){
-      return
-    }else{
+    if (!busquedaProvincia) {
+      return;
+    } else {
       setManejoProvincia(busquedaProvincia);
       setManejoMunicipio(busquedaMunicipio);
-      setmanejoPoblacion(busquedaPoblacion)
+      setmanejoPoblacion(busquedaPoblacion);
     }
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const [comunidades, provincias, municipios]: Array<any> =
+        const [comunidades, provincias, municipios, poblaciones]: Array<any> =
           await Promise.all([
-            help.get(
-              `${BASE_URL}comunidades?&type=JSON&key=${API_KEY}`
-            ),
+            help.get(`${BASE_URL}comunidades?&type=JSON&key=${API_KEY}`),
             help.get(
               `${BASE_URL}provincias?CCOM=${manejoProvincia}&type=JSON&key=${API_KEY}`
             ),
             help.get(
               `${BASE_URL}municipios?CPRO=${manejoMunicipio}&type=JSON&key=${API_KEY}`
             ),
+            help.get(
+              `${BASE_URL}poblaciones?CPRO=${manejoMunicipio}&CMUM=002&type=JSON&key`
+            ),
           ]);
         setComunidad(comunidades.data);
         setProvincia(provincias.data);
         setMunicipio(municipios.data);
         console.log(municipios.data);
+        console.log(poblaciones.data);
       } catch (err) {
         console.log(err);
       }
@@ -67,7 +72,7 @@ export const SelectList: FC<PropsList> = ({
     return () => {
       getData();
     };
-  }, [manejoProvincia,manejoMunicipio]);
+  }, [manejoProvincia, manejoMunicipio, manejoPoblacion]);
 
   return (
     <div>
@@ -93,7 +98,7 @@ export const SelectList: FC<PropsList> = ({
           ? provincia.map((el: any) => {
               return (
                 <OptionElement
-                  provincia = {el.CCOM}
+                  provincia={el.CCOM}
                   municipio={el.CPRO}
                   valor={el.PRO}
                   key={el.PRO}
@@ -106,21 +111,31 @@ export const SelectList: FC<PropsList> = ({
       <br />
       <h4>-- Municipio --</h4>
       <select name="" id="" onChange={handleChange}>
-      <option value="">---</option>
-      {municipio.length > 0 ?
-        municipio.map((el:any) => {
+        <option value="">---</option>
+        {municipio.length > 0
+          ? municipio.map((el: any) => {
+              return (
+                <OptionElement
+                  key={el.DMUN50}
+                  poblacion = {el.CMUM}
+                  municipio={el.CPRO}
+                  valor={el.DMUN50}
+                  render={el.DMUN50}
+                />
+              );
+            })
+          : ""}
+      </select>
+      <br />
+      <h4>-- Población --</h4>
+      <select name="" id="" onChange={handleChange}>
+        <option value="">---</option>
+        {poblacion.length > 0 ? poblacion.map((el: any) => {
           return(
-            <OptionElement
-            key = {el.DMUN50}
-            municipio={el.CPRO}
-            valor = {el.DMUN50}
-            render = {el.DMUN50}
-            />
+            {}
           )
-        }): ''
-      }
+        }) : ""}
       </select>
     </div>
   );
 };
-

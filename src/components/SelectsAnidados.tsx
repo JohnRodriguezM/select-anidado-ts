@@ -22,6 +22,9 @@ export const SelectsAnidados = (props:any) => {
 
       municipio = {municipio}
       setMunicipio = {setMunicipio}
+
+      poblacion = {poblacion}
+      setPoblacion = {setPoblacion}
       />
     </section>
   )
