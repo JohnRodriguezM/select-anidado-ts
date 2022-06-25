@@ -38,9 +38,10 @@ export const SelectList: FC<PropsList> = ({
       return;
     } else {
       setManejoProvincia(busquedaProvincia);
-      setManejoMunicipio(busquedaMunicipio);
-      setmanejoPoblacion(busquedaPoblacion);
     }
+    setManejoMunicipio(busquedaMunicipio);
+    setmanejoPoblacion(busquedaPoblacion);
+    console.log(busquedaMunicipio)
   };
 
   useEffect(() => {
@@ -56,14 +57,14 @@ export const SelectList: FC<PropsList> = ({
               `${BASE_URL}municipios?CPRO=${manejoMunicipio}&type=JSON&key=${API_KEY}`
             ),
             help.get(
-              `${BASE_URL}poblaciones?CPRO=${manejoMunicipio}&CMUM=002&type=JSON&key`
+              `${BASE_URL}poblaciones?CPRO=${manejoMunicipio}&CMUM=${manejoPoblacion}&type=JSON&key=${API_KEY}`
             ),
           ]);
         setComunidad(comunidades.data);
         setProvincia(provincias.data);
         setMunicipio(municipios.data);
-        console.log(municipios.data);
-        console.log(poblaciones.data);
+        setPoblacion(poblaciones.data);
+        console.log(poblaciones);
       } catch (err) {
         console.log(err);
       }
@@ -72,7 +73,7 @@ export const SelectList: FC<PropsList> = ({
     return () => {
       getData();
     };
-  }, [manejoProvincia, manejoMunicipio, manejoPoblacion]);
+  }, [manejoProvincia, manejoMunicipio, manejoPoblacion, manejoPoblacion]);
 
   return (
     <div>
@@ -117,7 +118,7 @@ export const SelectList: FC<PropsList> = ({
               return (
                 <OptionElement
                   key={el.DMUN50}
-                  poblacion = {el.CMUM}
+                  provincia={el.CCOM}
                   municipio={el.CPRO}
                   valor={el.DMUN50}
                   render={el.DMUN50}
@@ -130,11 +131,18 @@ export const SelectList: FC<PropsList> = ({
       <h4>-- Población --</h4>
       <select name="" id="" onChange={handleChange}>
         <option value="">---</option>
-        {poblacion.length > 0 ? poblacion.map((el: any) => {
-          return(
-            {}
-          )
-        }) : ""}
+        {poblacion.length > 0
+          ? poblacion.map((el: any) => {
+              return (
+                <OptionElement
+                  poblacion={el.CMUM}
+                  key={el.NENTSI50}
+                  valor={el.NENTSI50}
+                  render={el.NENTSI50}
+                />
+              );
+            })
+          : ""}
       </select>
     </div>
   );
