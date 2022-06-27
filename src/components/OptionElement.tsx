@@ -6,6 +6,9 @@ interface propsOption {
   provincia?: any;
   municipio?: any;
   poblacion?: any;
+
+manejo?: any;
+
   valor: any;
   render: any;
 }
@@ -15,6 +18,9 @@ export const OptionElement: FC<propsOption> = ({
   provincia,
   municipio,
   poblacion,
+
+manejo,
+
   valor,
   render,
 }) => {
@@ -23,6 +29,7 @@ export const OptionElement: FC<propsOption> = ({
     data-municipio={municipio}
     data-provincia={provincia}
     data-poblacion = {poblacion}
+    data-manejoo = {manejo}
     value={valor}>
       {render}
     </option>

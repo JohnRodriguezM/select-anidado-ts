@@ -26,7 +26,7 @@ export const SelectList: FC<PropsList> = ({
 }) => {
   const [manejoProvincia, setManejoProvincia] = useState(null);
   const [manejoMunicipio, setManejoMunicipio] = useState(null);
-  const [manejoPoblacion, setmanejoPoblacion] = useState(null);
+  const [manejoPoblacion, setManejoPoblacion] = useState(null);
 
   const handleChange = async (e: any) => {
     let base = e.target.options[e.target.selectedIndex];
@@ -39,15 +39,18 @@ export const SelectList: FC<PropsList> = ({
     } else {
       setManejoProvincia(busquedaProvincia);
     }
-    setManejoMunicipio(busquedaMunicipio);
-    setmanejoPoblacion(busquedaPoblacion);
-    console.log(busquedaMunicipio)
+    if (!busquedaMunicipio) {
+      return;
+    } else {
+      setManejoMunicipio(busquedaMunicipio);
+      setManejoPoblacion(busquedaPoblacion);
+    }
   };
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const [comunidades, provincias, municipios, poblaciones]: Array<any> =
+        const [comunidades, provincias, municipios]: Array<any> =
           await Promise.all([
             help.get(`${BASE_URL}comunidades?&type=JSON&key=${API_KEY}`),
             help.get(
@@ -57,23 +60,29 @@ export const SelectList: FC<PropsList> = ({
               `${BASE_URL}municipios?CPRO=${manejoMunicipio}&type=JSON&key=${API_KEY}`
             ),
             help.get(
-              `${BASE_URL}poblaciones?CPRO=${manejoMunicipio}&CMUM=${manejoPoblacion}&type=JSON&key=${API_KEY}`
+              `https://apiv1.geoapi.es/poblaciones?CPRO=04&CMUM=001&type=JSON&key=${API_KEY}`
             ),
           ]);
         setComunidad(comunidades.data);
         setProvincia(provincias.data);
         setMunicipio(municipios.data);
-        setPoblacion(poblaciones.data);
-        console.log(poblaciones);
       } catch (err) {
         console.log(err);
       }
     };
     getData();
     return () => {
-      getData();
+    getData();
     };
-  }, [manejoProvincia, manejoMunicipio, manejoPoblacion, manejoPoblacion]);
+  }, [
+    manejoProvincia,
+    manejoMunicipio,
+    manejoPoblacion,
+    setManejoPoblacion,
+    setComunidad,
+    setProvincia,
+    setMunicipio,
+  ]);
 
   return (
     <div>
@@ -118,27 +127,11 @@ export const SelectList: FC<PropsList> = ({
               return (
                 <OptionElement
                   key={el.DMUN50}
-                  provincia={el.CCOM}
+                  poblacion={el.CMUM}
+                  manejo={el.CPRO}
                   municipio={el.CPRO}
                   valor={el.DMUN50}
                   render={el.DMUN50}
-                />
-              );
-            })
-          : ""}
-      </select>
-      <br />
-      <h4>-- Población --</h4>
-      <select name="" id="" onChange={handleChange}>
-        <option value="">---</option>
-        {poblacion.length > 0
-          ? poblacion.map((el: any) => {
-              return (
-                <OptionElement
-                  poblacion={el.CMUM}
-                  key={el.NENTSI50}
-                  valor={el.NENTSI50}
-                  render={el.NENTSI50}
                 />
               );
             })
