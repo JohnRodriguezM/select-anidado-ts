@@ -1,36 +1,23 @@
-import React,{FC} from 'react';
-import { useState, useEffect } from 'react';
+import React, { FC } from "react";
 
-
-interface propsOption {
-  provincia?: any;
-  municipio?: any;
-  poblacion?: any;
-
-manejo?: any;
-
-  valor: any;
-  render: any;
-}
-
+import { propsOption } from "../types/type";
 
 export const OptionElement: FC<propsOption> = ({
   provincia,
   municipio,
   poblacion,
-
-manejo,
-
   valor,
   render,
+  label,
 }) => {
   return (
     <option
-    data-municipio={municipio}
-    data-provincia={provincia}
-    data-poblacion = {poblacion}
-    data-manejoo = {manejo}
-    value={valor}>
+      data-municipio={municipio}
+      data-provincia={provincia}
+      data-poblacion={poblacion}
+      value={valor}
+      label = {label}
+    >
       {render}
     </option>
   );

@@ -2,15 +2,32 @@ export interface PropsList {
   url?: string;
   handleChange?: any;
   title: string;
-  //states
-  comunidad?: string | Array<any> | any;
+  comunidad?: Array<any> | any;
   provincia?: any;
   municipio?: any;
-  poblacion?: any;
   nucleo?: any;
-  //setState
   setComunidad?: any | Array<any>;
   setProvincia?: any;
   setMunicipio?: any;
-  setPoblacion?: any;
 }
+
+export interface propsOption {
+  provincia?: any;
+  municipio?: any;
+  poblacion?: any;
+  valor: any;
+  render: any;
+  label?: any;
+}
+
+interface Form {
+  comunidad: string;
+  provincia: string;
+  municipio: string;
+}
+
+export const initialForm: Form = {
+  comunidad: "",
+  provincia: "",
+  municipio: "",
+};

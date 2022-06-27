@@ -1,11 +1,10 @@
-import React,{FC,useState,useEffect} from 'react'
+import React,{FC,useState} from 'react'
 import {SelectList} from './SelectList'
 
-export const SelectsAnidados = (props:any) => {
+export const SelectsAnidados: FC = (props) => {
   const [comunidad, setComunidad] = useState([])
   const [provincia, setProvincia] = useState([])
   const [municipio, setMunicipio] = useState([])
-  const [poblacion, setPoblacion] = useState([])
 
 
   return (
@@ -22,9 +21,6 @@ export const SelectsAnidados = (props:any) => {
 
       municipio = {municipio}
       setMunicipio = {setMunicipio}
-
-      poblacion = {poblacion}
-      setPoblacion = {setPoblacion}
       />
     </section>
   )
